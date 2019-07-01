@@ -253,18 +253,26 @@ public class MapShader extends AbstractConfigurable implements GameComponent, Dr
     }
   }
 
+  private static BufferedImage convertToARGB(BufferedImage image) {
+    BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = newImage.createGraphics();
+    g.drawImage(image, 0, 0, null);
+    g.dispose();
+    return newImage;
+  }
+
   /**
    * Get/Build the repeating rectangle used to generate the shade texture
    * pattern.
    */
   protected BufferedImage getShadePattern() {
     if (srcOp == null) buildShadePattern();
-    return srcOp.getImage();
+    return convertToARGB(srcOp.getImage());
   }
 
   protected BufferedImage getShadePattern(double zoom) {
     if (srcOp == null) buildShadePattern();
-    return Op.scale(srcOp,zoom).getImage();
+    return convertToARGB(Op.scale(srcOp,zoom).getImage());
   }
 
   protected Rectangle getPatternRect() {
